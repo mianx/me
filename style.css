@@ -2877,6 +2877,9 @@ body, html {
     color: #333333;
   }
   
+  .social-icons li:hover.social-icons-whatsapp a, .social-icons.social-icons-colored li.social-icons-whatsapp a {
+    color: #09fe5f;
+  }
   .social-icons li:hover.social-icons-behance a, .social-icons.social-icons-colored li.social-icons-behance a {
     color: #053eff;
   }
