@@ -2388,7 +2388,7 @@ body, html {
     position: relative;
     overflow: hidden;
   }
-  
+
   .hero-wrap .hero-mask, .hero-wrap .hero-bg, .hero-wrap .hero-bg-slideshow {
     position: absolute;
     top: 0;
@@ -2613,7 +2613,8 @@ body, html {
     margin: 40px auto;
     max-width: 1170px;
     padding: 30px;
-    border-radius: 20px !important;
+    /* border-radius: 20px !important; */
+    border-radius: 0.5rem;
   }
   
   .mfp-close-btn-in .ajax-container.bg-dark .mfp-close, .mfp-close-btn-in .ajax-container.bg-dark-1 .mfp-close, .mfp-close-btn-in .ajax-container.bg-dark-2 .mfp-close, .mfp-close-btn-in .ajax-container.bg-dark-3 .mfp-close, .mfp-close-btn-in .ajax-container.bg-dark-4 .mfp-close {
