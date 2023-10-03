@@ -134,6 +134,14 @@ body, html {
       transform: translate(24px, 0);
     }
   }
+  /* .abdullah-nav{
+    margin-top:0rem !important; 
+    padding: 1.5rem 1.5rem 0rem 1.5rem!important;
+  }
+  mb-lg-auto{
+    margin-top:0rem !important; 
+    padding: 1.5rem 1.5rem 0rem 1.5rem!important;  
+  } */
   
   /*--- Preloader Magnific Popup ----*/
   .mfp-container .preloader {
@@ -275,7 +283,7 @@ body, html {
   
   .text-6 {
     font-size: 24px !important;
-    font-size: 1.50rem !important;
+    /* font-size: 1.50rem !important; */
   }
   
   .text-7 {
@@ -1152,6 +1160,14 @@ body, html {
       z-index: 1000;
       -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
       box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    }
+    /* .abdullah-nav{
+      margin-top:0rem !important; 
+      padding: 0rem 0rem 0rem 0rem!important;
+    } */
+    mb-lg-auto{
+      margin-top:0rem !important; 
+      padding: 0rem 0rem 0rem 0rem!important;
     }
     .navbar-expand-sm .navbar-collapse .navbar-nav {
       overflow: hidden;
