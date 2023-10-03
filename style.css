@@ -1844,6 +1844,7 @@ body, html {
     .featured-box.featured-box-reverse-sm {
       text-align: right;
     }
+    
     .featured-box.featured-box-reverse-sm.style-1, .featured-box.featured-box-reverse-sm.style-2 {
       padding-right: 50px;
       padding-left: 0px;
@@ -2324,6 +2325,9 @@ body, html {
       padding-right: 0px;
       margin-right: 10px;
       font-size: 0.875rem;
+    }
+    .mar-t5{
+      margin-top:5%;
     }
   }
   
