@@ -2593,6 +2593,7 @@ body, html {
     margin: 40px auto;
     max-width: 1170px;
     padding: 30px;
+    border-radius: 20px !important;
   }
   
   .mfp-close-btn-in .ajax-container.bg-dark .mfp-close, .mfp-close-btn-in .ajax-container.bg-dark-1 .mfp-close, .mfp-close-btn-in .ajax-container.bg-dark-2 .mfp-close, .mfp-close-btn-in .ajax-container.bg-dark-3 .mfp-close, .mfp-close-btn-in .ajax-container.bg-dark-4 .mfp-close {
