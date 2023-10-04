@@ -2894,6 +2894,10 @@ body, html {
   .social-icons li:hover.social-icons-linkedin a, .social-icons.social-icons-colored li.social-icons-linkedin a {
     color: #ea4c89;
   }
+
+  .social-icons li:hover.social-icons-telegram a, .social-icons.social-icons-colored li.social-icons-telegram a {
+    color: #0E76A8;
+  }
   
   .social-icons li:hover.social-icons-github a, .social-icons.social-icons-colored li.social-icons-github a {
     color: #333333;

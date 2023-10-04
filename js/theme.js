@@ -293,6 +293,7 @@ $(function () {
 -------------------------- */
 var form = $('#contact-form'); // contact form
 var submit = $('#submit-btn'); // submit button
+var csrftoken = Cookies.get('csrftoken'); 
 
 // form submit event
 form.on('submit', function (e) {
@@ -304,10 +305,13 @@ form.on('submit', function (e) {
 			grecaptcha.execute(site_key, {action: 'contact'}).then(function (token) {
 				var gdata = form.serialize() + '&g-recaptcha-response=' + token;
 				$.ajax({
-					url: 'php/mail.php',  // form action url
-					type: 'POST', 		  // form submit method get/post
-					dataType: 'json', 	  // request type html/json/xml
-					data: gdata, 		  // serialize form data
+                    url: 'contact', 
+                    type: 'POST',
+                    dataType: 'json',
+                    data: gdata,
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+						},
 					beforeSend: function () {
 						submit.attr("disabled", "disabled");
 						var loadingText = '<span role="status" aria-hidden="true" class="spinner-border spinner-border-sm align-self-center me-2"></span>Sending.....'; // change submit button text
@@ -316,6 +320,20 @@ form.on('submit', function (e) {
 							submit.html(loadingText);
 						}
 					},
+					
+				// $.ajax({
+				// 	url: 'contact',  // form action url
+				// 	type: 'POST', 		  // form submit method get/post
+				// 	dataType: 'json', 	  // request type html/json/xml
+				// 	data: gdata, 		  // serialize form data
+				// 	beforeSend: function () {
+				// 		submit.attr("disabled", "disabled");
+				// 		var loadingText = '<span role="status" aria-hidden="true" class="spinner-border spinner-border-sm align-self-center me-2"></span>Sending.....'; // change submit button text
+				// 		if (submit.html() !== loadingText) {
+				// 			submit.data('original-text', submit.html());
+				// 			submit.html(loadingText);
+				// 		}
+				// 	},
 					success: function (data) {
 						submit.before(data.Message).fadeIn("slow"); // fade in response data 
 						submit.html(submit.data('original-text'));// reset submit button text
@@ -337,7 +355,7 @@ form.on('submit', function (e) {
 		});
 	} else {
 		$.ajax({
-			url: 'php/mail.php', // form action url
+			url: 'contact', // form action url
 			type: 'POST', // form submit method get/post
 			dataType: 'json', // request type html/json/xml
 			data: form.serialize(), // serialize form data
