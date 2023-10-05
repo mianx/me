@@ -305,7 +305,7 @@ form.on('submit', function (e) {
 			grecaptcha.execute(site_key, {action: 'contact'}).then(function (token) {
 				var gdata = form.serialize() + '&g-recaptcha-response=' + token;
 				$.ajax({
-                    url: 'contact', 
+                    url: 'contact/', 
                     type: 'POST',
                     dataType: 'json',
                     data: gdata,
