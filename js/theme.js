@@ -315,8 +315,14 @@ form.on('submit', function (e) {
                     // Change the URL to your Django endpoint
                     url: 'https://backend-portfolio-abdi-6407a7883a23.herokuapp.com/contact/', // form action url
                     type: 'POST', // form submit method get/post
-                    dataType: 'json', // request type html/json/xml
+					contentType: "application/json",
+                    // dataType: 'json', // request type html/json/xml
                     data: gdata, // serialized form data including CSRF token
+
+					headers: {
+						"Referer": "https://mianx.github.io/" // Set the Referer header explicitly
+					},
+				
                     beforeSend: function () {
                         submit.attr("disabled", "disabled");
                         var loadingText = '<span role="status" aria-hidden="true" class="spinner-border spinner-border-sm align-self-center me-2"></span>Sending.....'; // change submit button text
