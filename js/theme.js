@@ -295,211 +295,74 @@ $(function () {
 var form = $('#contact-form'); // contact form
 var submit = $('#submit-btn'); // submit button
 
-// form submit event
-form.on('submit', function (e) {
-    e.preventDefault(); // prevent default form submit
+function sendMail() {
+    // Get the form data
+    const name = document.getElementById('fName').value;
+    const email = document.getElementById('fMail').value;
+    const message = document.getElementById('fMsg').value;
 
-    // Get the CSRF token from the hidden input field
-    const csrfToken = $('#csrf-token').val();
+    // Create a JSON object with the form data
+    const data = {
+        name: name,
+        email: email,
+        'form-message': message
+    };
 
-    if (typeof $('#google-recaptcha-v3').val() != "undefined") {
-        grecaptcha.ready(function () {
-            var site_key = $('#google-recaptcha-v3').attr('src').split("render=")[1];
-            grecaptcha.execute(site_key, { action: 'contact' }).then(function (token) {
-                var gdata = form.serialize() + '&g-recaptcha-response=' + token;
+    // Get the button element and "Thank you" message element
+    const submitButton = document.getElementById('submit-btn');
+    const thankYouMessage = document.getElementById('thank-you-message');
 
-                // Include the CSRF token in the data object
-                gdata += '&csrfmiddlewaretoken=' + csrfToken;
+    // Disable the button and show the spinner
+    submitButton.setAttribute('disabled', 'disabled');
+    const originalText = submitButton.innerHTML;
+    submitButton.innerHTML = '<span role="status" aria-hidden="true" class="spinner-border spinner-border-sm align-self-center me-2"></span>Sending...';
 
-                $.ajax({
-                    // Change the URL to your Django endpoint
-                    url: 'https://backend-portfolio-abdi-6407a7883a23.herokuapp.com/contact/', // form action url
-                    type: 'POST', // form submit method get/post
-					contentType: "application/json",
-                    data: gdata, // serialized form data including CSRF token
-
-					// headers: {
-					// 	"Referer": "https://mianx.github.io/" // Set the Referer header explicitly
-					// },
-				
-                    beforeSend: function () {
-                        submit.attr("disabled", "disabled");
-                        var loadingText = '<span role="status" aria-hidden="true" class="spinner-border spinner-border-sm align-self-center me-2"></span>Sending.....'; // change submit button text
-                        if (submit.html() !== loadingText) {
-                            submit.data('original-text', submit.html());
-                            submit.html(loadingText);
-                        }
-                    },
-                    success: function (data) {
-                        submit.before(data.Message).fadeIn("slow"); // fade in response data 
-                        submit.html(submit.data('original-text'));// reset submit button text
-                        submit.removeAttr("disabled", "disabled");
-                        if (data.response == 'success') {
-                            form.trigger('reset'); // reset form
-                        }
-                        setTimeout(function () {
-                            $('.alert-dismissible').fadeOut('slow', function () {
-                                $(this).remove();
-                            });
-                        }, 3000);
-                    },
-                    error: function (e) {
-                        console.log(e)
-                    }
+    // Send a POST request to the Flask route
+    fetch('https://flask-backend-portfolio-abdi-e0d314dab24d.herokuapp.com/contact', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.ok) {
+            // Handle a successful response here
+            console.log('Email sent successfully');
+            // Show the "Thank you" message
+            thankYouMessage.style.display = 'block';
+            // Hide the message after 2 seconds
+            setTimeout(() => {
+                // Fade out and remove the "Thank you" message after 3 seconds
+                $(thankYouMessage).fadeOut('slow', function() {
+                    $(this).remove();
                 });
-            });
-        });
-    } else {
-        $.ajax({
-            // Change the URL to your Django endpoint
-            url: 'https://backend-portfolio-abdi-6407a7883a23.herokuapp.com/contact/', // form action url
-            type: 'POST', // form submit method get/post
-            dataType: 'json', // request type html/json/xml
-            data: form.serialize() + '&csrfmiddlewaretoken=' + csrfToken, // serialized form data including CSRF token
-            contentType: "application/json",
+            }, 3000);
 
-			// headers: {
-			// 	"Referer": "https://mianx.github.io/" // Set the Referer header explicitly
-			// },
+		} else {
+            // Handle an error response here
+            console.error('Error sending email');
+        }
+    })
+    .catch(error => {
+        // Handle any network or fetch API errors here
+        console.error('Fetch error:', error);
+    })
+    .finally(() => {
+        // Re-enable the button and restore the original text
+        submitButton.removeAttribute('disabled');
+        submitButton.innerHTML = originalText;
 
-			beforeSend: function () {
-                submit.attr("disabled", "disabled");
-                var loadingText = '<span role="status" aria-hidden="true" class="spinner-border spinner-border-sm align-self-center me-2"></span>Sending.....'; // change submit button text
-                if (submit.html() !== loadingText) {
-                    submit.data('original-text', submit.html());
-                    submit.html(loadingText);
-                }
-            },
-            success: function (data) {
-                submit.before(data.Message).fadeIn("slow"); // fade in response data 
-                submit.html(submit.data('original-text'));// reset submit button text
-                submit.removeAttr("disabled", "disabled");
-                if (data.response == 'success') {
-                    form.trigger('reset'); // reset form
-                }
-                setTimeout(function () {
-                    $('.alert-dismissible').fadeOut('slow', function () {
-                        $(this).remove();
-                    });
-                }, 3500);
-                if (typeof $('#recaptcha-v2').val() != "undefined") {
-                    grecaptcha.reset(); // reset reCaptcha
-                }
-            },
-            error: function (e) {
-                console.log(e)
-            }
-        });
-    }
+        // Clear the form data
+        document.getElementById('fName').value = '';
+        document.getElementById('fMail').value = '';
+        document.getElementById('fMsg').value = '';
+    });
+}
+
+document.getElementById('contact-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    sendMail(); // Call the sendMail function
 });
 
-// form submit event
-// form.on('submit', function (e) {
-// 	e.preventDefault(); // prevent default form submit
-
-// 	if (typeof $('#google-recaptcha-v3').val() != "undefined") {
-// 		grecaptcha.ready(function () {
-// 			var site_key = $('#google-recaptcha-v3').attr('src').split("render=")[1];
-// 			grecaptcha.execute(site_key, {action: 'contact'}).then(function (token) {
-// 				var gdata = form.serialize() + '&g-recaptcha-response=' + token;
-// 				$.ajax({
-//                     url: 'contact/', 
-//                     type: 'POST',
-//                     dataType: 'json',
-//                     data: gdata,
-//                     headers: {
-//                         'X-CSRFToken': csrftoken,
-// 						},
-// 					beforeSend: function () {
-// 						submit.attr("disabled", "disabled");
-// 						var loadingText = '<span role="status" aria-hidden="true" class="spinner-border spinner-border-sm align-self-center me-2"></span>Sending.....'; // change submit button text
-// 						if (submit.html() !== loadingText) {
-// 							submit.data('original-text', submit.html());
-// 							submit.html(loadingText);
-// 						}
-// 					},
-					
-// 				// $.ajax({
-// 				// 	url: 'contact',  // form action url
-// 				// 	type: 'POST', 		  // form submit method get/post
-// 				// 	dataType: 'json', 	  // request type html/json/xml
-// 				// 	data: gdata, 		  // serialize form data
-// 				// 	beforeSend: function () {
-// 				// 		submit.attr("disabled", "disabled");
-// 				// 		var loadingText = '<span role="status" aria-hidden="true" class="spinner-border spinner-border-sm align-self-center me-2"></span>Sending.....'; // change submit button text
-// 				// 		if (submit.html() !== loadingText) {
-// 				// 			submit.data('original-text', submit.html());
-// 				// 			submit.html(loadingText);
-// 				// 		}
-// 				// 	},
-// 					success: function (data) {
-// 						submit.before(data.Message).fadeIn("slow"); // fade in response data 
-// 						submit.html(submit.data('original-text'));// reset submit button text
-// 						submit.removeAttr("disabled", "disabled");
-// 						if (data.response == 'success') {
-// 							form.trigger('reset'); // reset form
-// 						}
-// 						setTimeout(function () {
-// 							$('.alert-dismissible').fadeOut('slow', function(){
-// 								$(this).remove();
-// 							});
-// 						}, 3000);
-// 					},
-// 					error: function (e) {
-// 						console.log(e)
-// 					}
-// 				});
-// 			});
-// 		});
-// 	} else {
-// 		$.ajax({
-// 			url: 'contact', // form action url
-// 			type: 'POST', // form submit method get/post
-// 			dataType: 'json', // request type html/json/xml
-// 			data: form.serialize(), // serialize form data
-// 			beforeSend: function () {
-// 				submit.attr("disabled", "disabled");
-// 				var loadingText = '<span role="status" aria-hidden="true" class="spinner-border spinner-border-sm align-self-center me-2"></span>Sending.....'; // change submit button text
-// 				if (submit.html() !== loadingText) {
-// 					submit.data('original-text', submit.html());
-// 					submit.html(loadingText);
-// 				}
-// 			},
-// 			success: function (data) {
-// 				submit.before(data.Message).fadeIn("slow"); // fade in response data 
-// 				submit.html(submit.data('original-text'));// reset submit button text
-// 				submit.removeAttr("disabled", "disabled");
-// 				if (data.response == 'success') {
-// 					form.trigger('reset'); // reset form
-// 				}
-// 				setTimeout(function () {
-// 					$('.alert-dismissible').fadeOut('slow', function(){
-// 						$(this).remove();
-// 					});
-// 				}, 3500);
-// 				if (typeof $('#recaptcha-v2').val() != "undefined") {
-// 					grecaptcha.reset(); // reset reCaptcha
-// 				}
-// 			},
-// 			error: function (e) {
-// 				console.log(e)
-// 			}
-// 		});
-// 	}
-// });
-
-})(jQuery)
-
-document.addEventListener("DOMContentLoaded", function () {
-    // Make an AJAX request to get the CSRF token
-    fetch("https://backend-portfolio-abdi-6407a7883a23.herokuapp.com/contact/get-csrf-token/")
-        .then(response => response.json())
-        .then(data => {
-            const csrfToken = data.csrf_token;
-            document.getElementById("csrf-token").value = csrfToken;
-			console.log(csrfToken);
-        })
-        .catch(error => {
-            console.error("Error fetching CSRF token:", error);
-        });
-});
+})(jQuery)	
