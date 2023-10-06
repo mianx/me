@@ -288,19 +288,6 @@ $(function () {
 	});
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Make an AJAX request to get the CSRF token
-    fetch("http://127.0.0.1:8000/contact/get-csrf-token/")
-        .then(response => response.json())
-        .then(data => {
-            const csrfToken = data.csrf_token;
-            document.getElementById("csrf-token").value = csrfToken;
-			console.log(csrfToken);
-        })
-        .catch(error => {
-            console.error("Error fetching CSRF token:", error);
-        });
-});
 
 /*------------------------
    Contact Form
@@ -491,3 +478,17 @@ form.on('submit', function (e) {
 // });
 
 })(jQuery)
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Make an AJAX request to get the CSRF token
+    fetch("https://backend-portfolio-abdi-6407a7883a23.herokuapp.com/contact/get-csrf-token/")
+        .then(response => response.json())
+        .then(data => {
+            const csrfToken = data.csrf_token;
+            document.getElementById("csrf-token").value = csrfToken;
+			console.log(csrfToken);
+        })
+        .catch(error => {
+            console.error("Error fetching CSRF token:", error);
+        });
+});
