@@ -335,7 +335,8 @@ function sendMail() {
             setTimeout(() => {
                 // Fade out and remove the "Thank you" message after 3 seconds
                 $(thankYouMessage).fadeOut('slow', function() {
-                    $(this).remove();
+					thankYouMessage.style.display = 'none';
+                    // $(this).remove();
                 });
             }, 3000);
 
